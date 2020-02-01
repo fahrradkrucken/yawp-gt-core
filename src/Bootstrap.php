@@ -116,7 +116,7 @@ class Bootstrap
      */
     public function addAssetsDefaultFixes()
     {
-        add_action('wp_enqueue_scripts', function() {
+        add_action('wp_enqueue_scripts', function () {
             // disable emoji
             remove_action('wp_head', 'print_emoji_detection_script', 7);
             remove_action('admin_print_scripts', 'print_emoji_detection_script');
@@ -200,10 +200,10 @@ class Bootstrap
      */
     public function addAction($actionName, $callableOrFilePath)
     {
-        if (!is_callable($callableOrFilePath) && is_string($callableOrFilePath))
-            return $this->addActionFile($actionName, $callableOrFilePath);
-        elseif (is_callable($callableOrFilePath))
+        if (is_callable($callableOrFilePath))
             $this->addAction($actionName, $callableOrFilePath);
+        elseif (is_string($callableOrFilePath))
+            return $this->addActionFile($actionName, $callableOrFilePath);
         return $this;
     }
 
