@@ -92,8 +92,8 @@ class Bootstrap
      */
     public function addAssetsOnLogin($assetsDir = '/static/', $assetsList = [])
     {
-        $assetsDir = Helper::normalizePath(get_template_directory() . $assetsDir);
         $assetsUrl = get_template_directory_uri() . $assetsDir;
+        $assetsDir = Helper::normalizePath(get_template_directory() . $assetsDir);
         $assetsList = $this->normalizeAssetsList($assetsList, $assetsDir, $assetsUrl);
 
         add_action('login_head', function () use ($assetsList) {
@@ -104,6 +104,11 @@ class Bootstrap
             if (!empty($assetsList['js']))
                 foreach ($assetsList['js'] as $item)
                     echo '<script src="' . $item['url'] . '?ver=' . date('YMD-hi') . '"></script>';
+
+//            echo '<pre>';
+//            var_dump("::ASSETS ADDED ::");
+//            var_dump($assetsList);
+//            echo '</pre>';
         });
 
         return $this;
@@ -128,16 +133,6 @@ class Bootstrap
     }
 
     /**
-     * @param $filePath string
-     */
-    public function addAssetOnEditor($filePath)
-    {
-        add_action('after_setup_theme', function () use ($filePath) {
-            add_editor_style($filePath);
-        });
-    }
-
-    /**
      * Add Default CSS & JS
      *
      * @param string $action
@@ -148,8 +143,8 @@ class Bootstrap
      */
     private function addAssets($action = '', $assetsDir = '/static/', $assetsList = [])
     {
-        $assetsDir = Helper::normalizePath(get_template_directory() . $assetsDir);
         $assetsUrl = get_template_directory_uri() . $assetsDir;
+        $assetsDir = Helper::normalizePath(get_template_directory() . $assetsDir);
         $assetsList = $this->normalizeAssetsList($assetsList, $assetsDir, $assetsUrl);
 
         add_action($action, function () use ($assetsList) {
@@ -178,7 +173,7 @@ class Bootstrap
             'js'  => [],
         ];
         if (!empty($assetsListOriginal)) {
-            foreach ($assetsList as $item) {
+            foreach ($assetsListOriginal as $item) {
                 $assetsListItem = [
                     'id'   => $item[0],
                     'url'  => strpos($item[1], 'http') !== false ? $item[1] : ($assetsUrl . $item[1]),
